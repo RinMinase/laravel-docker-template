@@ -73,5 +73,4 @@ Nonetheless, it also has its downsides, (references [here](https://dev.to/kakiso
 
 **Why use static versions for docker containers?**
 
-Why not? A variable version might mean that it works on my machine but not on yours because yours has a different (possibly newer) version than mine.
-References [here](https://nickjanetakis.com/blog/docker-tip-18-please-pin-your-docker-image-versions) and [here](https://docs.gradle.org/current/userguide/dependency_locking.html).
+Why not? A variable version might mean that it works on my machine but not on yours because yours has a different (possibly newer) version than mine (references [here](https://nickjanetakis.com/blog/docker-tip-18-please-pin-your-docker-image-versions) and [here](https://docs.gradle.org/current/userguide/dependency_locking.html)).

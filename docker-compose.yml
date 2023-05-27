@@ -28,7 +28,9 @@ services:
       dockerfile: nginx.dockerfile
       args:
         - NGINX_VERSION=1.23.3
+        # php container - service name
         - PHP_UPSTREAM_CONTAINER=php
+        # php container - php-fpm exposed port
         - PHP_UPSTREAM_PORT=9000
     volumes:
       - ./:/var/www
@@ -47,8 +49,11 @@ services:
     restart: unless-stopped
     tty: true
     environment:
+      # default is 'postgres', but you can change it in your ENV file
       - POSTGRES_USER=${DB_USERNAME:-postgres}
+      # default is 'postgres', but you can change it in your ENV file
       - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
+      # default is 'laravel', but you can change it in your ENV file
       - POSTGRES_DB=${DB_DATABASE:-laravel}
     ports:
       - '${DB_PORT:-5432}:5432'

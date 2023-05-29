@@ -44,7 +44,7 @@ The database by default uses these default parameters to let you get started wit
 
 ## FAQ
 
-**How to update PHP / nginx / PostgreSQL?**
+### How to update PHP / nginx / PostgreSQL?
 
 - Updating `PHP`
   - Modify the version text under `docker-compose.yml` under `services : php : build : args`, `PHP_VERSION`
@@ -59,11 +59,11 @@ The database by default uses these default parameters to let you get started wit
   - Example here: https://github.com/RinMinase/laravel-docker-template/blob/258923b0dc2e5fef9f6337954fcebafb59661d2c/docker-compose.yml#L48
   - You can find the postgres versions possible [here](https://hub.docker.com/_/postgres/tags?page=1&name=-alpine)
 
-**Why use official images?**
+### Why use official images?
 
 Other tutorials or guides uses customized images (see [here for the guide](https://www.digitalocean.com/community/tutorials/how-to-install-and-set-up-laravel-with-docker-compose-on-ubuntu-22-04) -- actual [line of code](https://github.com/do-community/travellist-laravel-demo/blob/cb9abd07cb6e8fb46d12c0f9cd650f3a6b976307/docker-compose.yml#L10)), these images are so hard to update manually compared to just editing a value then rebuilding the whole container again, see the question above on how to update each docker container.
 
-**Why use alpine linux?**
+### Why use alpine linux?
 
   Alpine linux is very lightweight and secure enough. Since the image used is lightweight, you can quickly download it compared to fully-fledged linux distros such as Ubuntu. (Some references for these: [here](https://nickjanetakis.com/blog/the-3-biggest-wins-when-using-alpine-as-a-base-docker-image) and [here](https://sysdig.com/learn-cloud-native/container-security/what-is-docker-alpine/)).
 
@@ -71,6 +71,6 @@ Nonetheless, it also has its downsides, (references [here](https://dev.to/kakiso
 - using other package managers aside from `apk`
 - some libraries which you may possibly use are not present such as `glibc` since alpine uses `musl-libc` and requires a [sad and annoying workaround](https://stackoverflow.com/a/37835009) for it to work
 
-**Why use static versions for docker containers?**
+### Why use static versions for docker containers?
 
 Why not? A variable version might mean that it works on my machine but not on yours because yours has a different (possibly newer) version than mine (references [here](https://nickjanetakis.com/blog/docker-tip-18-please-pin-your-docker-image-versions) and [here](https://docs.gradle.org/current/userguide/dependency_locking.html)).

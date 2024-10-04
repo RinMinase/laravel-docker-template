@@ -21,7 +21,7 @@ RUN docker-php-ext-install pdo pdo_pgsql
 ARG COMPOSER_VERSION
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-  && php composer-setup.php \
+  && php composer-setup.php --version=${COMPOSER_VERSION} \
   && php -r "unlink('composer-setup.php');"
 
 RUN mv composer.phar /usr/local/bin/composer

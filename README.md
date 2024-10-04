@@ -10,6 +10,13 @@ I'm sick of other extremely complicated and lengthy guides and tutorials on how 
 2. Clone your newly created repository
 3. Copy the env file by running `cp .env.example .env`
 4. Create and run the docker containers by `docker-compose up -d`
+5. Navigate in the created container `docker exec -it php sh`
+6. Run the commands below to start your Laravel application
+  ```
+  composer install
+  php artisan key:generate
+  php artisan migrate:fresh --seed
+  ```
 
 ### Using Git clone
 1. Clone the repository by running `git clone git@github.com:RinMinase/laravel-docker-template.git`
@@ -20,11 +27,25 @@ I'm sick of other extremely complicated and lengthy guides and tutorials on how 
     - `git init`
 3. Copy the env file by running `cp .env.example .env`
 4. Create and run the docker containers by `docker-compose up -d`
+5. Navigate in the created container `docker exec -it php sh`
+6. Run the commands below to start your Laravel application
+  ```
+  composer install
+  php artisan key:generate
+  php artisan migrate:fresh --seed
+  ```
 
 ### Downloading the repository
 1. Download the repository as a zip file
 2. Copy the env file by running `cp .env.example .env`
 3. Create and run the docker containers by `docker-compose up -d`
+5. Navigate in the created container `docker exec -it php sh`
+6. Run the commands below to start your Laravel application
+  ```
+  composer install
+  php artisan key:generate
+  php artisan migrate:fresh --seed
+  ```
 
 ## Default Values
 

@@ -63,21 +63,65 @@ The database by default uses these default parameters to let you get started wit
 - `DB_USERNAME` or your default database username: `postgres`
 - `DB_PASSWORD` or your default database password: `postgres`
 
+
+### Job / Commands / Schedule updates and restarting the supervisor
+<sub><sup>[Return to the table of contents](#table-of-contents)</sup></sub>
+
+In cases there are any updates to:
+- Jobs (found on `app/Jobs`)
+- Commands (found on `app/Commands`)
+- Schedules (found on `bootstrap/app.php` under `withSchedule`)
+
+Please run the following: 
+
+1. Navigate inside the `php` docker container [[how]](#re-running-the-project)
+
+2. Run the command to restart the <worker> group (`queue-worker` and `schedule-worker`)
+
+    ```bash
+    supervisorctl restart worker:
+    ```
+
+
+### Managing the supervisor
+<sub><sup>[Return to the table of contents](#table-of-contents)</sup></sub>
+
+This application runs supervisor on the `php` container. Supervisor runs these tasks:
+
+| Task Name       | Group   | Command                     | Description                    |
+| --------------- | ------- | --------------------------- | ------------------------------ |
+| php-fpm         | -       | `php-fpm`                   | Runs FastCGI Process Manager   |
+| queue-worker    | worker  | `php artisan queue:work`    | Runs Laravel's Queue worker    |
+| schedule-worker | worker  | `php artisan schedule:work` | Runs Laravel's Schedule worker |
+
+To manage the supervisor the commands below can be used:
+
+| Command                           | Description                                    |
+| --------------------------------- | ---------------------------------------------- |
+| supervisorctl reread              | Re-reads changes in supervisor config files    |
+| supervisorctl update              | Updates supervisor with changes after `reread` |
+| supervisorctl status              | Check status of all running tasks              |
+| supervisorctl start <task name>   | Starts the task                                |
+| supervisorctl stop <task name>    | Stops the task                                 |
+| supervisorctl restart <task name> | Restarts the task                              |
+
+**Please note:** Supervisor logs are kept in `./docker/logs/supervisor.log`
+
 ## FAQ
 
-### How to update PHP / nginx / PostgreSQL?
+### How to update PHP / caddy / PostgreSQL?
 
 - Updating `PHP`
   - Modify the version text under `docker-compose.yml` under `services : php : build : args`, `PHP_VERSION`
-  - Example here: https://github.com/RinMinase/laravel-docker-template/blob/258923b0dc2e5fef9f6337954fcebafb59661d2c/docker-compose.yml#L15
+  - Example here: https://github.com/RinMinase/laravel-docker-template/blob/15c9c74cb13e085fd0db2efa83bf9986fded29c5/docker-compose.yml#L15
   - You can find the php versions possible [here](https://hub.docker.com/_/php/tags?page=1&name=fpm-alpine)
-- Updating `nginx`
-  - Modify the version text under `docker-compose.yml` under `services : nginx : build : args`, `NGINX_VERSION`
-  - Example here: https://github.com/RinMinase/laravel-docker-template/blob/258923b0dc2e5fef9f6337954fcebafb59661d2c/docker-compose.yml#L30
-  - You can find the nginx versions possible [here](https://hub.docker.com/_/nginx/tags?page=1&name=-alpine)
+- Updating `caddy`
+  - Modify the version text under `docker-compose.yml` under `services : caddy : image`, and change the version of the image name
+  - Example here: https://github.com/RinMinase/laravel-docker-template/blob/15c9c74cb13e085fd0db2efa83bf9986fded29c5/docker-compose.yml#L328
+  - You can find the caddy versions possible [here](https://hub.docker.com/_/caddy/tags?name=alpine)
 - Updating `db`
   - Modify the version text under `docker-compose.yml` under `services : db : image`, and change the version of the image name
-  - Example here: https://github.com/RinMinase/laravel-docker-template/blob/258923b0dc2e5fef9f6337954fcebafb59661d2c/docker-compose.yml#L48
+  - Example here: https://github.com/RinMinase/laravel-docker-template/blob/15c9c74cb13e085fd0db2efa83bf9986fded29c5/docker-compose.yml#L65
   - You can find the postgres versions possible [here](https://hub.docker.com/_/postgres/tags?page=1&name=-alpine)
 
 ### Why use official images?
@@ -86,11 +130,22 @@ Other tutorials or guides uses customized images (see [here for the guide](https
 
 ### Why use alpine linux?
 
-  Alpine linux is very lightweight and secure enough. Since the image used is lightweight, you can quickly download it compared to fully-fledged linux distros such as Ubuntu. (Some references for these: [here](https://nickjanetakis.com/blog/the-3-biggest-wins-when-using-alpine-as-a-base-docker-image) and [here](https://sysdig.com/learn-cloud-native/container-security/what-is-docker-alpine/)).
+Alpine linux is very lightweight and secure enough. Since the image used is lightweight, you can quickly download it compared to fully-fledged linux distros such as Ubuntu. (Some references for these: [here](https://nickjanetakis.com/blog/the-3-biggest-wins-when-using-alpine-as-a-base-docker-image) and [here](https://sysdig.com/learn-cloud-native/container-security/what-is-docker-alpine/)).
 
 Nonetheless, it also has its downsides, (references [here](https://dev.to/kakisoft/dockeralpine-why-you-should-avoid-alpine-linux-44he) and [here](https://www.linkedin.com/pulse/musl-libc-alpines-greatest-weakness-rogan-lynch)) I've even encountered a few of them, these are:
 - using other package managers aside from `apk`
 - some libraries which you may possibly use are not present such as `glibc` since alpine uses `musl-libc` and requires a [sad and annoying workaround](https://stackoverflow.com/a/37835009) for it to work
+
+### Why use (or migrated) to caddy instead of nginx?
+
+Caddy is often preferred over Nginx for its simplicity and modern design. Unlike Nginx, Caddy automatically handles HTTPS with free TLS certificates via Let’s Encrypt, removing the need for manual certificate setup or cron jobs (although this is not used in this repository as it was deemed unnecessary).
+
+Additionally, its configuration syntax is way cleaner and extremely easier to understand, making it ideal for quick deployments and maintainable setups.
+
+Regardless, if you do prefer nginx, please refer to the previous setup under this commit:
+- https://github.com/RinMinase/laravel-docker-template/tree/258923b0dc2e5fef9f6337954fcebafb59661d2c
+
+The files needed for it is likewise under `./docker/nginx-backup/*` for the time being. The docker-compose setup is likewise commented as well for now.
 
 ### Why use static versions for docker containers?
 

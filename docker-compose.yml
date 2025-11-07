@@ -1,6 +1,8 @@
 volumes:
   db:
     driver: local
+  caddy_data:
+  caddy_config:
 
 services:
   php:
@@ -14,34 +16,49 @@ services:
         - ALPINE_VERSION=3.20
         - COMPOSER_VERSION=2.8.0
     volumes:
-      - ./:/var/www
+      - ./:/srv
+      - ./docker/logs/:/etc/supervisor/logs
     expose:
       - "9000"
-    working_dir: /var/www
+    working_dir: /srv
     tty: true
 
-  nginx:
+  caddy:
     container_name: webserver
+    image: caddy:2.9.1-alpine
     restart: unless-stopped
-    build:
-      context: ./docker
-      dockerfile: nginx.dockerfile
-      args:
-        - NGINX_VERSION=1.23.3
-        # php container - service name
-        - PHP_UPSTREAM_CONTAINER=php
-        # php container - php-fpm exposed port
-        - PHP_UPSTREAM_PORT=9000
-    volumes:
-      - ./:/var/www
-      - ./docker/logs/:/var/log/nginx
-      - ./docker/sites/:/etc/nginx/sites-available
     ports:
-      - "${APP_PORT:-80}:80"
-    expose:
-      - "${APP_PORT:-80}"
+      - "80:80"
+    volumes:
+      - ./docker/caddyfile:/etc/caddy/Caddyfile
+      - ./:/srv
+      - caddy_data:/data
+      - caddy_config:/config
     depends_on:
       - php
+
+#   nginx:
+#     container_name: webserver
+#     restart: unless-stopped
+#     build:
+#       context: ./docker
+#       dockerfile: nginx.dockerfile
+#       args:
+#         - NGINX_VERSION=1.23.3
+#         # php container - service name
+#         - PHP_UPSTREAM_CONTAINER=php
+#         # php container - php-fpm exposed port
+#         - PHP_UPSTREAM_PORT=9000
+#     volumes:
+#       - ./:/var/www
+#       - ./docker/logs/:/var/log/nginx
+#       - ./docker/sites/:/etc/nginx/sites-available
+#     ports:
+#       - "${APP_PORT:-80}:80"
+#     expose:
+#       - "${APP_PORT:-80}"
+#     depends_on:
+#       - php
 
   db:
     container_name: database

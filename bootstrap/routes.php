@@ -13,10 +13,10 @@ Route::prefix('api')
 
     Route::prefix('sample')
       ->group(function () {
-        Route::get('', [\App\Http\Controllers\SampleController::class, 'get_all']);
-        Route::get('{id}', [\App\Http\Controllers\SampleController::class, 'get']);
-        Route::post('', [\App\Http\Controllers\SampleController::class, 'add']);
-        Route::put('', [\App\Http\Controllers\SampleController::class, 'edit']);
-        Route::delete('', [\App\Http\Controllers\SampleController::class, 'delete']);
+        Route::get('', [\App\Controllers\SampleController::class, 'get_all']);
+        Route::get('{id}', [\App\Controllers\SampleController::class, 'get']);
+        Route::post('', [\App\Controllers\SampleController::class, 'add']);
+        Route::put('', [\App\Controllers\SampleController::class, 'edit']);
+        Route::delete('', [\App\Controllers\SampleController::class, 'delete']);
       });
   });

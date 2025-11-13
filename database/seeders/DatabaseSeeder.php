@@ -2,16 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder {
-  use WithoutModelEvents;
+use App\Models\User;
+use App\Models\Sample;
 
-  /**
-   * Seed the application's database.
-   */
+class DatabaseSeeder extends Seeder {
+
   public function run(): void {
     // User::factory(10)->create();
 
@@ -19,5 +16,18 @@ class DatabaseSeeder extends Seeder {
       'name' => 'Test User',
       'email' => 'test@example.com',
     ]);
+
+    $data = [
+      ['name' => 'John Doe', 'value' => 1234],
+      ['name' => 'Jane Doe', 'value' => 2345],
+      ['name' => 'Richard Roe', 'value' => 3456],
+      ['name' => 'Mary Roe', 'value' => 4567],
+      ['name' => 'Jane Smith', 'value' => 5678],
+      ['name' => 'Jenny Public', 'value' => 1235],
+      ['name' => 'Jack Brown', 'value' => 1236],
+      ['name' => 'James Doe', 'value' => 1237],
+    ];
+
+    foreach ($data as $item) Sample::create($item);
   }
 }

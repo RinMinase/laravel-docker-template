@@ -10,7 +10,8 @@
   "license": "MIT",
   "require": {
     "php": "^8.2",
-    "laravel/framework": "^13.2"
+    "laravel/framework": "^13.2",
+    "laravel/sanctum": "^4.3"
   },
   "require-dev": {
     "laravel/pail": "^1.2.6",

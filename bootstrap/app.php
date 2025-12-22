@@ -11,7 +11,6 @@ use App\Middleware\CustomPreventRequestForgery;
 return Application::configure(basePath: dirname(__DIR__))
   ->withRouting(
     web: __DIR__ . '/routes.php',
-    commands: __DIR__ . '/console.php',
     health: '/up',
   )
   ->withProviders([
